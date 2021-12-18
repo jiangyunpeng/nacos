@@ -138,7 +138,7 @@ public class AddressServerMemberLookup extends AbstractMemberLookup {
         int maxRetry = EnvUtil.getProperty(ADDRESS_SERVER_RETRY_PROPERTY, Integer.class, DEFAULT_SERVER_RETRY_TIME);
         for (int i = 0; i < maxRetry; i++) {
             try {
-                syncFromAddressUrl();
+                syncFromAddressUrl();//异步拉取节点信息
                 success = true;
                 break;
             } catch (Throwable e) {
@@ -150,7 +150,7 @@ public class AddressServerMemberLookup extends AbstractMemberLookup {
             throw new NacosException(NacosException.SERVER_ERROR, ex);
         }
         
-        GlobalExecutor.scheduleByCommon(new AddressServerSyncTask(), DEFAULT_SYNC_TASK_DELAY_MS);
+        GlobalExecutor.scheduleByCommon(new AddressServerSyncTask(), DEFAULT_SYNC_TASK_DELAY_MS);//创建定时任务
     }
     
     @Override
@@ -198,7 +198,7 @@ public class AddressServerMemberLookup extends AbstractMemberLookup {
                 return;
             }
             try {
-                syncFromAddressUrl();
+                syncFromAddressUrl();//异步拉取节点信息
             } catch (Throwable ex) {
                 addressServerFailCount++;
                 if (addressServerFailCount >= maxFailCount) {
